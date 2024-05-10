@@ -8,12 +8,12 @@ package guiA;
  *
  * @author Estudiante
  */
-public class GuiA extends javax.swing.JFrame {
+public class VentanaPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form GuiA
      */
-    public GuiA() {
+    public VentanaPrincipal() {
         initComponents();
     }
 
@@ -164,7 +164,7 @@ public class GuiA extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        CrearUsuario VentanaCrear = new CrearUsuario();
+        VentanaCrearUsuario VentanaCrear = new VentanaCrearUsuario();
         VentanaCrear.setVisible(true);
         
     }//GEN-LAST:event_jButton2MouseClicked
@@ -174,7 +174,7 @@ public class GuiA extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void BotonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonLoginMouseClicked
-        Facturas facturas = new Facturas();
+        VentanaFacturas facturas = new VentanaFacturas();
         facturas.setVisible(true);
         facturas.setAlwaysOnTop(true);
         facturas.setLocationRelativeTo(this);

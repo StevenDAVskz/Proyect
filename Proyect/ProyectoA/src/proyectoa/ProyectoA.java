@@ -4,8 +4,8 @@
  */
 package proyectoa;
 
-import guiA.Facturas;
-import guiA.GuiA;
+import guiA.VentanaFacturas;
+import guiA.VentanaPrincipal;
 
 /**
  *
@@ -17,7 +17,7 @@ public class ProyectoA {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        GuiA VentanaL = new GuiA();
+        VentanaPrincipal VentanaL = new VentanaPrincipal();
         VentanaL.setVisible(true);
         VentanaL.setLocationRelativeTo(null);
        

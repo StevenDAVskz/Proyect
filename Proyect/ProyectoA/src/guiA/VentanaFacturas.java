@@ -8,12 +8,12 @@ package guiA;
  *
  * @author USUARIO
  */
-public class Facturas extends javax.swing.JFrame {
+public class VentanaFacturas extends javax.swing.JFrame {
 
     /**
      * Creates new form Facturas
      */
-    public Facturas() {
+    public VentanaFacturas() {
         initComponents();
     }
 
