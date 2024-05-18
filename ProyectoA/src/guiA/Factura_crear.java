@@ -43,6 +43,10 @@ public class Factura_crear extends javax.swing.JFrame {
         jLabel6.setText("jLabel6");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+<<<<<<< HEAD
+=======
+        setTitle("Crear factura");
+>>>>>>> origin/master
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
 
