@@ -11,11 +11,22 @@ import java.util.HashMap;
  * @author LENOVO
  */
 public class Usuario {
-    public static String id;
-    public static String clave;
+    public static String id ;
+    public static String clave ;
     public static String nombre;
     public static String genero;
     public static String email;
      public static HashMap<String, Usuario> usuariosNuevos;
     
+     
+     
+     public String getid(){
+         return id;
+     }
+     
+     public  String getclave(){
+         return clave;
+     }
+    
 }
+
