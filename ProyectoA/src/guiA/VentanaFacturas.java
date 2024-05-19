@@ -46,6 +46,16 @@ public class VentanaFacturas extends javax.swing.JFrame {
 
         jButton3.setBackground(new java.awt.Color(204, 204, 255));
         jButton3.setText("Modificar");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(204, 204, 255));
         jButton4.setText("Crear ");
@@ -163,6 +173,17 @@ public class VentanaFacturas extends javax.swing.JFrame {
         crear.setLocationRelativeTo(this);
         setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+       
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+      Factura_modificar modificar = new Factura_modificar();
+        modificar.setVisible(true);
+        modificar.setLocationRelativeTo(this);
+        setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

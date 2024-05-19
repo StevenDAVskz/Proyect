@@ -4,13 +4,11 @@
  */
 package guiA;
 import guiA.datos.Usuario;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import proyectoa.bd.CrudArchivo;
 
 
 /**
@@ -182,21 +180,28 @@ public class VentanaCrearUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane,"Debes llenar todos los campos, son obligatorios.");
         }else if(ValidarNumeros(CampoID.getText().trim())){
              
-             if (Usuario.usuariosNuevos.containsKey(ID)) {
+             if (Usuario.usuariosNuevos.containsKey(ID)){
                 String msj = "Cedula en uso " + ID;
                 JOptionPane.showMessageDialog(this, msj);
                 limpiar();
             } else{
-                 Usuario.usuariosNuevos.put(ID, user);
-                int nUsers = Usuario.usuariosNuevos.size();
-                String msj = "Usuario creado con exito! "
-                        + "Numero actuales de usuarios: " + nUsers;
-                JOptionPane.showMessageDialog(this, msj);   
-                limpiar();
-                 setVisible(false);
-                 VentanaPrincipal main = new VentanaPrincipal();
-                 main.setVisible(true);
-                 main.setLocationRelativeTo(this);
+                 try {
+                     Usuario.usuariosNuevos.put(ID, user);
+                     CrudArchivo.guardar(Usuario.usuariosNuevos, "Usuarios.dat");
+                     int nUsers = Usuario.usuariosNuevos.size();
+                     String msj = "Usuario creado con exito! "
+                             + "Numero actuales de usuarios: " + nUsers;
+                     JOptionPane.showMessageDialog(this, msj);
+                     limpiar();
+                     setVisible(false);
+                     VentanaPrincipal main = new VentanaPrincipal();
+                     main.setVisible(true);
+                     main.setLocationRelativeTo(this);
+                 } catch (Exception error) {
+                    String mensaje= "Guardando Usuario";
+                    mensaje += "\n"+error.getMessage();
+                    System.out.println(mensaje);
+                 }
              }
          }else{
              JOptionPane.showMessageDialog(rootPane,"Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
