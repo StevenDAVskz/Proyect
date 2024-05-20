@@ -160,52 +160,50 @@ public class VentanaCrearUsuario extends javax.swing.JFrame {
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-             String 	Nombre = NombreUser.getText();
+             
+        
+             String Nombre = NombreUser.getText();
              String ID = CampoID.getText();
              String Contraseña = ContraField.getText();
              String Genero = (String)CampoGenero.getSelectedItem();
              
-             Usuario user = new Usuario();
+             Usuario usuario = new Usuario();
              Usuario.nombre = Nombre;
              Usuario.id = ID;
              Usuario.clave = Contraseña;
              Usuario.genero = Genero;
              
             
-             if (Usuario.usuariosNuevos == null) {
-            Usuario.usuariosNuevos = new HashMap<String,Usuario>();
+             
+        if(CampoID.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "El codigo es requerido");
+            return;
         }
         
-        if(NombreUser.getText().trim().isEmpty() || CampoID.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
+        if(NombreUser.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
             JOptionPane.showMessageDialog(rootPane,"Debes llenar todos los campos, son obligatorios.");
         }else if(ValidarNumeros(CampoID.getText().trim())){
-             
-             if (Usuario.usuariosNuevos.containsKey(ID)){
-                String msj = "Cedula en uso " + ID;
-                JOptionPane.showMessageDialog(this, msj);
-                limpiar();
-            } else{
-                 try {
-                     Usuario.usuariosNuevos.put(ID, user);
-                     CrudArchivo.guardar(Usuario.usuariosNuevos, "Usuarios.dat");
-                     int nUsers = Usuario.usuariosNuevos.size();
-                     String msj = "Usuario creado con exito! "
-                             + "Numero actuales de usuarios: " + nUsers;
-                     JOptionPane.showMessageDialog(this, msj);
-                     limpiar();
-                     setVisible(false);
-                     VentanaPrincipal main = new VentanaPrincipal();
-                     main.setVisible(true);
-                     main.setLocationRelativeTo(this);
-                 } catch (Exception error) {
-                    String mensaje= "Guardando Usuario";
-                    mensaje += "\n"+error.getMessage();
-                    System.out.println(mensaje);
-                 }
+             if (Usuario.usuariosNuevos == null) {
+             Usuario.usuariosNuevos = new HashMap<>();
              }
+             
+                try {
+            // Guardar el usuario en la BD
+            int total = CrudArchivo.crearUsuario(usuario);
+            String mensaje = "Usuario guardado con exito\nTotal: "+total;
+            JOptionPane.showMessageDialog(this, mensaje);
+            limpiar();
+        } catch (Exception error) 
+        {
+           JOptionPane.showMessageDialog(this, error.getMessage(), "Validacion"
+                                         , JOptionPane.ERROR_MESSAGE);
+           limpiar();
+        }
+             
          }else{
              JOptionPane.showMessageDialog(rootPane,"Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
         }
+      
              
     }//GEN-LAST:event_jButton1ActionPerformed
 

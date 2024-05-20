@@ -6,7 +6,7 @@ package proyectoa;
 
 import guiA.VentanaFacturas;
 import guiA.VentanaPrincipal;
-import java.util.Properties;
+
 
 /**
  *
@@ -21,10 +21,6 @@ public class ProyectoA {
         VentanaPrincipal VentanaL = new VentanaPrincipal();
         VentanaL.setVisible(true);
         VentanaL.setLocationRelativeTo(null);
-        Properties propiedades=System.getProperties();
-        for(var p : propiedades.entrySet()){
-            System.out.println(p.getKey()+" : "+p.getValue());
-        }
     }
    
     

@@ -15,7 +15,6 @@ public class Usuario {
     public static String clave ;
     public static String nombre;
     public static String genero;
-    public static String email;
      public static HashMap<String, Usuario> usuariosNuevos;
     
      
