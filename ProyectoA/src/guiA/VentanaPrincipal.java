@@ -117,6 +117,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 jButton2MouseClicked(evt);
             }
         });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/guiA/Img/candado.png"))); // NOI18N
 
@@ -242,9 +247,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonLoginActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        VentanaCrearUsuario VentanaCrear = new VentanaCrearUsuario();
-        VentanaCrear.setVisible(true);
-        VentanaCrear.setLocationRelativeTo(this);
+        VentanaCrear ventanaCrear=new VentanaCrear(this, rootPaneCheckingEnabled);
+        ventanaCrear.setVisible(true);
+        ventanaCrear.setLocationRelativeTo(this);
         setVisible(false);
 
     }//GEN-LAST:event_jButton2MouseClicked
@@ -260,6 +265,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
            
     }//GEN-LAST:event_formComponentHidden
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
       public static void main(String args[]) {
         /* Set the Nimbus look and feel */

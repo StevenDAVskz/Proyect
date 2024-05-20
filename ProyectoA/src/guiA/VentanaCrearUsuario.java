@@ -15,13 +15,20 @@ import proyectoa.bd.CrudArchivo;
  *
  * @author Estudiante
  */
-public class VentanaCrearUsuario extends javax.swing.JFrame {
-
+public class VentanaCrearUsuario extends javax.swing.JDialog {
+    
+    /**
+     *
+     */
+    public CrudArchivo crudArchivo;
     /**
      * Creates new form CrearUsuario
      */
-    public VentanaCrearUsuario() {
+    public VentanaCrearUsuario(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        crudArchivo = proyectoa.ProyectoA.crudArchivo;
+        
     }
 
     /**
@@ -175,16 +182,13 @@ public class VentanaCrearUsuario extends javax.swing.JFrame {
              
             
              
-        if(CampoID.getText().trim().isEmpty()){
-            JOptionPane.showMessageDialog(this, "El codigo es requerido");
-            return;
-        }
+      
         
-        if(NombreUser.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
+        if(NombreUser.getText().trim().isEmpty() || CampoID.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
             JOptionPane.showMessageDialog(rootPane,"Debes llenar todos los campos, son obligatorios.");
         }else if(ValidarNumeros(CampoID.getText().trim())){
              if (Usuario.usuariosNuevos == null) {
-             Usuario.usuariosNuevos = new HashMap<>();
+             Usuario.usuariosNuevos = new HashMap<String,Usuario>();
              }
              
                 try {
