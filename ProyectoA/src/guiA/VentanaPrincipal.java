@@ -5,20 +5,16 @@
 package guiA;
 
 import guiA.datos.Usuario;
-import static guiA.datos.Usuario.usuariosNuevos;
 import java.awt.BorderLayout;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import proyectoa.FacturasCrud;
-import proyectoa.bd.CrudArchivo;
-import static proyectoa.bd.CrudArchivo.buscarObjeto;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,16 +28,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
     }
-
-   
-
-    
     
     public void limpiar(){
         IDcampo.setText("");
         ContraseñaCampo.setText("");
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -232,65 +223,64 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_ContraseñaCampoActionPerformed
 
     private void BotonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonLoginMouseClicked
-    try {
-   
-            // Buscar los usuarios en el archivo y asignarlos al mapa de usuarios
-         
-    
-        
-    
-    if(IDcampo.getText().trim().isEmpty() || ContraseñaCampo.getText().trim().isEmpty()){
-        JOptionPane.showMessageDialog(this, "Por favor llenar el campo requerido");
-        return;
-    }
+       // Supongamos que tienes métodos para obtener los datos de los campos de texto
+        String id = IDcampo.getText();
+        String contraseña = ContraseñaCampo.getText();
 
-    String ID = IDcampo.getText();
-    String Contraseña = ContraseñaCampo.getText();
-
-
-    if (Usuario.usuariosNuevos == null) {
-        Usuario.usuariosNuevos = new HashMap<>();
-    }
-
-
-    if (!Usuario.usuariosNuevos.containsKey(ID)){
-        String msj = "ID no existe " + ID;
-        JOptionPane.showMessageDialog(this, msj);
-        limpiar();
-    } 
-    
-       else {
-       
-        // Si el ID existe, buscar el usuario correspondiente
-        Usuario user = FacturasCrud.buscarUsuario(ID);
-
-        // Verificar si el usuario y la contraseña coinciden
-        if (Usuario.usuariosNuevos.containsKey(ID) && user.getclave().equals(Contraseña)) {
-            
-            VentanaFacturas facturas = new VentanaFacturas();
-            facturas.setVisible(true);
-            facturas.setAlwaysOnTop(true);
-            facturas.setLocationRelativeTo(this);
-            setVisible(false); 
-        } else {
-            
-            JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
-            limpiar(); 
+        // Validar campos
+        if (id.trim().isEmpty() || contraseña.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor llenar el campo requerido");
+            return;
         }
-    }
-} catch (Exception error) {
-   
-    JOptionPane.showMessageDialog(this, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    limpiar(); 
-}
 
-        
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        
-        
-        
-        
-        
+        try {
+            // Configuración de conexión a la base de datos
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
+
+            // Verificar si el ID existe en la base de datos
+            String query = "SELECT contra FROM registro WHERE id = ?";
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, id);
+            rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                String msj = "ID no existe " + id;
+                JOptionPane.showMessageDialog(null, msj);
+                limpiar();
+            } else {
+                // Si el ID existe, verificar la contraseña
+                String claveBD = rs.getString("contra");
+                if (claveBD.equals(contraseña)) {
+                    // Credenciales correctas, abrir nueva ventana
+                    VentanaFacturas facturas = new VentanaFacturas();
+                    facturas.setVisible(true);
+                    facturas.setLocationRelativeTo(this);
+                    setVisible(false);
+                } else {
+                    // Credenciales incorrectas
+                    JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+                    limpiar();
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            limpiar();
+        } finally {
+            // Cerrar recursos
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    
         
 
         
@@ -301,10 +291,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonLoginActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        VentanaCrear ventanaCrear=new VentanaCrear(this, rootPaneCheckingEnabled);
+        VentanaCrear ventanaCrear=new VentanaCrear();
         ventanaCrear.setVisible(true);
         ventanaCrear.setLocationRelativeTo(this);
         setVisible(false);
+        
 
     }//GEN-LAST:event_jButton2MouseClicked
 
@@ -324,38 +315,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-      public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Factura_crear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Factura_crear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Factura_crear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Factura_crear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VentanaPrincipal().setVisible(true);
-            }
-        });
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

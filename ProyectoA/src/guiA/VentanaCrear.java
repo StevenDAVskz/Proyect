@@ -4,40 +4,36 @@
  */
 package guiA;
 
-import proyectoa.bd.CrudArchivo;
+
 import guiA.datos.Usuario;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static guiA.datos.Usuario.id;
+import static guiA.datos.Usuario.nombre;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import proyectoa.FacturasCrud;
-import proyectoa.bd.CrudArchivo;
 
 /**
  *
  * @author LENOVO
  */
-public class VentanaCrear extends javax.swing.JDialog {
+public class VentanaCrear extends javax.swing.JFrame {
     
-    public CrudArchivo crudArchivo;
+   
 
     /**
      * Creates new form VentanaCrear
      */
-    public VentanaCrear(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public VentanaCrear() {
+
         initComponents();
-        crudArchivo = proyectoa.ProyectoA.crudArchivo;
+        
     }
     public static boolean ValidarNumeros(String ID){
         return ID.matches("[0-9]{1,10}");
     }
-    
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,6 +55,7 @@ public class VentanaCrear extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         CampoGenero = new javax.swing.JComboBox<>();
         ContraField = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -104,6 +101,13 @@ public class VentanaCrear extends javax.swing.JDialog {
             }
         });
 
+        jButton2.setText("Regresar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout CampoNOmbreLayout = new javax.swing.GroupLayout(CampoNOmbre);
         CampoNOmbre.setLayout(CampoNOmbreLayout);
         CampoNOmbreLayout.setHorizontalGroup(
@@ -128,6 +132,10 @@ public class VentanaCrear extends javax.swing.JDialog {
                         .addGap(78, 78, 78)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CampoNOmbreLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
         );
         CampoNOmbreLayout.setVerticalGroup(
             CampoNOmbreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,7 +160,9 @@ public class VentanaCrear extends javax.swing.JDialog {
                 .addGroup(CampoNOmbreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(75, 75, 75))
+                .addGap(17, 17, 17)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -175,7 +185,7 @@ public class VentanaCrear extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-       String Nombre = NombreUser.getText();
+        String Nombre = NombreUser.getText();
         String ID = CampoID.getText();
         String Contraseña = ContraField.getText();
         String Genero = (String)CampoGenero.getSelectedItem();
@@ -187,72 +197,72 @@ public class VentanaCrear extends javax.swing.JDialog {
         Usuario.genero = Genero;
 
 
-        if(NombreUser.getText().trim().isEmpty() || CampoID.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
-            JOptionPane.showMessageDialog(rootPane,"Debes llenar todos los campos, son obligatorios.");
-        }else if(ValidarNumeros(CampoID.getText().trim())){
-            if (Usuario.usuariosNuevos == null) {
-                Usuario.usuariosNuevos = new HashMap<String,Usuario>();
+         if (nombre.trim().isEmpty() || id.trim().isEmpty() ||Contraseña.trim().isEmpty() || CampoGenero.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+            return;
+        }
+
+        if (!ValidarNumeros(id.trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
+            return;
+        }
+
+    
+         try {
+            // Configuración de conexión a la base de datos
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
+
+            // Verificar si el ID ya existe en la base de datos
+            String checkQuery = "SELECT COUNT(*) FROM registro WHERE id = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+            checkStmt.setString(1, id);
+            ResultSet rs = checkStmt.executeQuery();
+            rs.next();
+            if (rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null, "Cédula en uso " + id, "Error", JOptionPane.ERROR_MESSAGE);
+                limpiar();
+                return;
             }
-             if (Usuario.usuariosNuevos.containsKey(ID)){
-                String msj = "Cedula en uso " + ID;
-                JOptionPane.showMessageDialog(this, msj);
-                limpiar();
-            } else {
-                 
-                 Usuario.usuariosNuevos.put(ID, usuario);
-                int nUsers = Usuario.usuariosNuevos.size();
-                String msj = "Usuario creado con exito! "
-                        + "Numero actuales de usuarios: " + nUsers;
-                JOptionPane.showMessageDialog(this, msj);   
-                limpiar();
-                 setVisible(false);
-                 VentanaPrincipal main = new VentanaPrincipal();
-                 main.setVisible(true);
-                 main.setLocationRelativeTo(this);
-             }
-             
 
-             try {
-                
-                     Usuario.usuariosNuevos.put(ID, usuario);
-                     crudArchivo.crearUsuario(Usuario.usuariosNuevos, "Usuarios.dat");
-                     int nUsers = Usuario.usuariosNuevos.size();
-                     String msj = "Usuario creado con exito! "
-                             + "Numero actuales de usuarios: " + nUsers;
-                     JOptionPane.showMessageDialog(this, msj);
-                     limpiar();
-                     setVisible(false);
-                     VentanaPrincipal main = new VentanaPrincipal();
-                     main.setVisible(true);
-                     main.setLocationRelativeTo(this);
-                 } catch (Exception error) {
-                    String mensaje= "Guardando Usuario";
-                    mensaje += "\n"+error.getMessage();
-                    System.out.println(mensaje);
-                 }
+            // Insertar el nuevo usuario si el ID no existe
+            String insertQuery = "INSERT INTO registro (usuario, id, contra, genero) VALUES (?, ?, ?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+            insertStmt.setString(1, usuario.nombre);
+            insertStmt.setString(2, usuario.id);
+            insertStmt.setString(3, usuario.clave);
+            insertStmt.setString(4, usuario.genero);
 
-        }else{
-            JOptionPane.showMessageDialog(rootPane,"Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
-        }
-        
-          try {
-            // Guardar el usuario en la BD
-            int total = FacturasCrud.crearUsuario(usuario);
-            String mensaje = "Usuario guardado\nTotal: "+total;
-            JOptionPane.showMessageDialog(this, mensaje);
+            int rowsAffected = insertStmt.executeUpdate();
+            if (rowsAffected > 0) {
+                String mensaje = "Usuario creado con éxito! Número actuales de usuarios: " + rowsAffected;
+                JOptionPane.showMessageDialog(null, mensaje);
+                limpiar();
+                setVisible(false);
+                VentanaPrincipal main = new VentanaPrincipal();
+                main.setVisible(true);
+                main.setLocationRelativeTo(null);
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             limpiar();
-        } catch (Exception error) 
-        {
-           JOptionPane.showMessageDialog(this, error.getMessage(), "Validacion", JOptionPane.ERROR_MESSAGE);
-           limpiar();
         }
-
-
+    
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ContraFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContraFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ContraFieldActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        VentanaPrincipal main = new VentanaPrincipal();
+        main.setVisible(true);
+        main.setLocationRelativeTo(this);
+        setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,44 +273,7 @@ public class VentanaCrear extends javax.swing.JDialog {
                 ContraField.setText("");
                 CampoGenero.setSelectedIndex(0);
     }
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                VentanaCrear dialog = new VentanaCrear(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CampoGenero;
@@ -309,6 +282,7 @@ public class VentanaCrear extends javax.swing.JDialog {
     private javax.swing.JTextField ContraField;
     private javax.swing.JTextField NombreUser;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

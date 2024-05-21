@@ -4,23 +4,16 @@
  */
 package guiA.datos;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  *
  * @author LENOVO
  */
-import java.io.Serializable;
-
 public class Usuario implements Serializable {
-    
-     public Usuario() {
-        if (usuariosNuevos == null) {
-            usuariosNuevos = new HashMap<>();
-        }
-    }
-    public static String id;
-    public static String clave;
+    public static String id ;
+    public static String clave ;
     public static String nombre;
     public static String genero;
      public static HashMap<String, Usuario> usuariosNuevos;
@@ -28,14 +21,14 @@ public class Usuario implements Serializable {
      
      
      public String getid(){
-         return id ;
+         return id;
      }
      
      public  String getclave(){
          return clave;
      }
      
-      public static void setNombre(String nombre) {
+     public static void setNombre(String nombre) {
         Usuario.nombre = nombre;
     }
        public static void setClave(String nombre) {
@@ -47,9 +40,6 @@ public class Usuario implements Serializable {
          public static void setId(String nombre) {
         Usuario.id = id;
     }
-         
-             
-   
+    
 }
-
 
