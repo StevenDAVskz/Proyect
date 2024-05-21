@@ -6,10 +6,15 @@ package guiA;
 
 import proyectoa.bd.CrudArchivo;
 import guiA.datos.Usuario;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import proyectoa.FacturasCrud;
 import proyectoa.bd.CrudArchivo;
 
 /**
@@ -31,6 +36,8 @@ public class VentanaCrear extends javax.swing.JDialog {
     public static boolean ValidarNumeros(String ID){
         return ID.matches("[0-9]{1,10}");
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,7 +175,7 @@ public class VentanaCrear extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        String Nombre = NombreUser.getText();
+       String Nombre = NombreUser.getText();
         String ID = CampoID.getText();
         String Contraseña = ContraField.getText();
         String Genero = (String)CampoGenero.getSelectedItem();
@@ -178,6 +185,7 @@ public class VentanaCrear extends javax.swing.JDialog {
         Usuario.id = ID;
         Usuario.clave = Contraseña;
         Usuario.genero = Genero;
+
 
         if(NombreUser.getText().trim().isEmpty() || CampoID.getText().trim().isEmpty() || ContraField.getText().trim().isEmpty() || CampoGenero.getSelectedIndex() == 0){
             JOptionPane.showMessageDialog(rootPane,"Debes llenar todos los campos, son obligatorios.");
@@ -189,7 +197,8 @@ public class VentanaCrear extends javax.swing.JDialog {
                 String msj = "Cedula en uso " + ID;
                 JOptionPane.showMessageDialog(this, msj);
                 limpiar();
-            } else{
+            } else {
+                 
                  Usuario.usuariosNuevos.put(ID, usuario);
                 int nUsers = Usuario.usuariosNuevos.size();
                 String msj = "Usuario creado con exito! "
@@ -201,10 +210,12 @@ public class VentanaCrear extends javax.swing.JDialog {
                  main.setVisible(true);
                  main.setLocationRelativeTo(this);
              }
+             
 
              try {
+                
                      Usuario.usuariosNuevos.put(ID, usuario);
-                     CrudArchivo.crearUsuario(Usuario.usuariosNuevos, "Usuarios.dat");
+                     crudArchivo.crearUsuario(Usuario.usuariosNuevos, "Usuarios.dat");
                      int nUsers = Usuario.usuariosNuevos.size();
                      String msj = "Usuario creado con exito! "
                              + "Numero actuales de usuarios: " + nUsers;
@@ -223,6 +234,19 @@ public class VentanaCrear extends javax.swing.JDialog {
         }else{
             JOptionPane.showMessageDialog(rootPane,"Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
         }
+        
+          try {
+            // Guardar el usuario en la BD
+            int total = FacturasCrud.crearUsuario(usuario);
+            String mensaje = "Usuario guardado\nTotal: "+total;
+            JOptionPane.showMessageDialog(this, mensaje);
+            limpiar();
+        } catch (Exception error) 
+        {
+           JOptionPane.showMessageDialog(this, error.getMessage(), "Validacion", JOptionPane.ERROR_MESSAGE);
+           limpiar();
+        }
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

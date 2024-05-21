@@ -7,6 +7,7 @@ package proyectoa;
 import guiA.VentanaFacturas;
 import guiA.VentanaPrincipal;
 import proyectoa.bd.CrudArchivo;
+import proyectoa.bd.CrudArchivo;
 
 
 /**
@@ -18,7 +19,7 @@ public class ProyectoA {
     /**
      *
      */
-    static public CrudArchivo crudArchivo=new CrudArchivo();
+    static public CrudArchivo crudArchivo = new CrudArchivo();
     /**
      * @param args the command line arguments
      */

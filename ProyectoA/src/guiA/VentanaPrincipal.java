@@ -5,10 +5,20 @@
 package guiA;
 
 import guiA.datos.Usuario;
+import static guiA.datos.Usuario.usuariosNuevos;
 import java.awt.BorderLayout;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import proyectoa.FacturasCrud;
+import proyectoa.bd.CrudArchivo;
+import static proyectoa.bd.CrudArchivo.buscarObjeto;
 
 /**
  *
@@ -22,6 +32,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
     }
+
+   
+
+    
+    
+    public void limpiar(){
+        IDcampo.setText("");
+        ContraseñaCampo.setText("");
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -212,26 +232,60 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_ContraseñaCampoActionPerformed
 
     private void BotonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonLoginMouseClicked
-       Usuario user = new Usuario();
-        String ID = IDcampo.getText();
-        String Contraseña = ContraseñaCampo.getText();
+    try {
+   
+            // Buscar los usuarios en el archivo y asignarlos al mapa de usuarios
+         
+    
         
-        
-        String id = user.getid();
-        String password = user.getclave();
-        Usuario.usuariosNuevos = new HashMap<String,Usuario>();
-        
-        if (ID.equals(id) && password.equals(Contraseña)) {
+    
+    if(IDcampo.getText().trim().isEmpty() || ContraseñaCampo.getText().trim().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Por favor llenar el campo requerido");
+        return;
+    }
+
+    String ID = IDcampo.getText();
+    String Contraseña = ContraseñaCampo.getText();
+
+
+    if (Usuario.usuariosNuevos == null) {
+        Usuario.usuariosNuevos = new HashMap<>();
+    }
+
+
+    if (!Usuario.usuariosNuevos.containsKey(ID)){
+        String msj = "ID no existe " + ID;
+        JOptionPane.showMessageDialog(this, msj);
+        limpiar();
+    } 
+    
+       else {
+       
+        // Si el ID existe, buscar el usuario correspondiente
+        Usuario user = FacturasCrud.buscarUsuario(ID);
+
+        // Verificar si el usuario y la contraseña coinciden
+        if (Usuario.usuariosNuevos.containsKey(ID) && user.getclave().equals(Contraseña)) {
             
             VentanaFacturas facturas = new VentanaFacturas();
-             facturas.setVisible(true);
+            facturas.setVisible(true);
             facturas.setAlwaysOnTop(true);
             facturas.setLocationRelativeTo(this);
-            setVisible(false);
-        }else{
-            String msj = "ID o contraseña incorrecta ";
-                JOptionPane.showMessageDialog(this, msj);
+            setVisible(false); 
+        } else {
+            
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+            limpiar(); 
         }
+    }
+} catch (Exception error) {
+   
+    JOptionPane.showMessageDialog(this, error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    limpiar(); 
+}
+
+        
+
         
         
         
