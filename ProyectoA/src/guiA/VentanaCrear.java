@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -195,6 +196,7 @@ public class VentanaCrear extends javax.swing.JFrame {
         Usuario.id = ID;
         Usuario.clave = Contraseña;
         Usuario.genero = Genero;
+        
 
 
          if (nombre.trim().isEmpty() || id.trim().isEmpty() ||Contraseña.trim().isEmpty() || CampoGenero.getSelectedIndex() == 0) {
