@@ -84,13 +84,6 @@ public class Factura_modificar extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        CampoNombreC.setEnabled(false);
-
-        CampoIDc.setEnabled(false);
-
-        CampoFechaC.setEnabled(false);
-
-        CampoProductoC.setEnabled(false);
         CampoProductoC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CampoProductoCActionPerformed(evt);
@@ -104,8 +97,6 @@ public class Factura_modificar extends javax.swing.JFrame {
         jLabel11.setText("Fecha");
 
         jLabel12.setText("Producto");
-
-        CampoCostoC.setEnabled(false);
 
         jLabel13.setText("costo");
 
@@ -344,10 +335,7 @@ public class Factura_modificar extends javax.swing.JFrame {
             MostrarFecha.setText(FechaC);
             costo.setText(CostoC);
             
-            CampoNombreC.setEditable(true);
-            CampoCostoC.setEditable(true);
-            CampoID.setEditable(true);
-            CampoProductoC.setEditable(true);
+            
         }
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
