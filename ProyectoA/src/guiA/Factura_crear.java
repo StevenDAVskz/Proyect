@@ -4,12 +4,21 @@
  */
 package guiA;
 
+import com.sun.jdi.connect.spi.Connection;
 import static guiA.VentanaCrear.ValidarNumeros;
 import guiA.datos.Clientes;
 import static guiA.datos.Usuario.id;
 import static guiA.datos.Usuario.nombre;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -162,38 +171,70 @@ public class Factura_crear extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+String nombreCliente = NombreCliente.getText();
+    String idCliente = IDcliente.getText();
+    String producto = Producto.getText();
+    LocalDateTime fechaActual = LocalDateTime.now();
+    String fecha = fechaActual.toString();
 
-        String nombreCliente = NombreCliente.getText();
-        String idCliente = IDcliente.getText();
-        String producto = Producto.getText();
-        LocalDateTime fechaActual = LocalDateTime.now();
-        String fecha = fechaActual.toString();
-        
-        Clientes cliente = new Clientes();
-        Clientes.NombreCliente = nombreCliente;
-        Clientes.IDcliente = idCliente;
-        Clientes.Producto = producto;
-        cliente.Fecha = fecha;
-        
-        
-        
-         if (nombreCliente.trim().isEmpty() || idCliente.trim().isEmpty() ||producto.trim().isEmpty() ) {
-            JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
-            return;
+    Clientes cliente = new Clientes();
+    Clientes.NombreCliente = nombreCliente;
+    Clientes.IDcliente = idCliente;
+    Clientes.Producto = producto;
+    cliente.Fecha = fecha;
+
+    if (nombreCliente.trim().isEmpty() || idCliente.trim().isEmpty() || producto.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+        return;
+    }
+
+    if (!ValidarNumeros(idCliente.trim())) {
+        JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
+        return;
+    }
+
+    // Conectar a la base de datos y realizar la inserción
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+
+    try {
+        // Configuración de conexión a la base de datos
+        String url = "jdbc:mysql://localhost:3306/resgistro";
+        String user = "root"; // tu usuario de MySQL
+        String password = ""; // tu contraseña de MySQL
+
+        conn = DriverManager.getConnection(url, user, password);
+
+        // Consulta de inserción
+        String sql = "INSERT INTO clientes (IDcliente, NombreCliente, Producto, Fecha) VALUES (?, ?, ?, ?)";
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, idCliente);
+        pstmt.setString(2, nombreCliente);
+        pstmt.setString(3, producto);
+        pstmt.setString(4, fecha);
+
+        int rowsInserted = pstmt.executeUpdate();
+        if (rowsInserted > 0) {
+            JOptionPane.showMessageDialog(rootPane, "Cliente añadido exitosamente!");
         }
-         
-          if (!ValidarNumeros(idCliente.trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
-            return;
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(rootPane, "Error al conectar con la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        // Cerrar los recursos
+        try {
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-         
-       
+    }
 
-
-        setVisible(false);
-        VentanaFacturas factura = new VentanaFacturas();
-        factura.setVisible(true);
-        factura.setLocationRelativeTo(this);
+    setVisible(false);
+    VentanaFacturas factura = new VentanaFacturas();
+    factura.setVisible(true);
+    factura.setLocationRelativeTo(this);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -67,6 +67,11 @@ public class VentanaFacturas extends javax.swing.JFrame {
 
         jButton5.setBackground(new java.awt.Color(204, 204, 255));
         jButton5.setText("Buscar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setBackground(new java.awt.Color(204, 204, 255));
         jButton6.setText("Eliminar");
@@ -184,6 +189,14 @@ public class VentanaFacturas extends javax.swing.JFrame {
         modificar.setLocationRelativeTo(this);
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        FacturaBuscar buscar = new FacturaBuscar();
+        buscar.setVisible(true);
+        buscar.setLocationRelativeTo(this);
+        setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

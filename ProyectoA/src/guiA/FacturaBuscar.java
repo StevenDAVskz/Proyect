@@ -10,6 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
 
 /**
  *
@@ -75,18 +79,24 @@ public class FacturaBuscar extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
+        jLabel1.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 24)); // NOI18N
         jLabel1.setText("Buscar");
 
+        jLabel3.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel3.setText("Ingrese el ID del cliente");
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
+        jLabel6.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel6.setText("Nombre");
 
+        jLabel7.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel7.setText("ID");
 
+        jLabel9.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel9.setText("Producto");
 
+        jLabel8.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel8.setText("Fecha");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -124,9 +134,10 @@ public class FacturaBuscar extends javax.swing.JFrame {
                     .addComponent(MostrarID, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MostrarFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MostrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(259, Short.MAX_VALUE))
         );
 
+        jLabel5.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel5.setText("Facturas del cliente");
 
         jButton1.setText("Buscar");
@@ -150,22 +161,21 @@ public class FacturaBuscar extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(IDcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addGap(67, 67, 67))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(IDcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(106, 106, 106)
+                                .addComponent(jLabel5)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,55 +221,59 @@ public class FacturaBuscar extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String idCliente = IDcliente.getText();
+     String idCliente = IDcliente.getText().trim();
+    
+    if (idCliente.isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+        return;
+    }
+    
+    if (!ValidarNumeros(idCliente)) {
+        JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
+        return;
+    }
+    
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        // Configuración de conexión a la base de datos
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
         
-        if (idCliente.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
-            return;
-        }
-        
-          if (!ValidarNumeros(idCliente.trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar numeros en el ID, Maximo 10 numeros.");
-            return;
-        }
-          
-          
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        // Verificar si el ID existe en la base de datos
+        String query = "SELECT NombreCliente, IDcliente, Producto, Fecha FROM clientes WHERE IDcliente = ?";
+        pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, idCliente);
+        rs = pstmt.executeQuery();
 
-          
-          try {
-              
-               // Configuración de conexión a la base de datos
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
-
-            // Verificar si el ID existe en la base de datos
-            String query = "SELECT contra FROM registro WHERE id = ?";
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, idCliente);
-            rs = pstmt.executeQuery();
-
-            if (!rs.next()) {
-                String msj = "ID no existe " + idCliente;
-                JOptionPane.showMessageDialog(null, msj);
-                IDcliente.setText("");
-            }else{
-                String NombreC = rs.getString("NombreCliente");
-                String IDC = rs.getString("IDcliente");
-                String ProductoC = rs.getString("Producto");
-                String FechaC = rs.getString("Fecha");
-                
-                MostrarNombre.setText(NombreC);
-                MostrarID.setText(IDC);
-                MostrarProducto.setText(ProductoC);
-                MostrarFecha.setText(FechaC);
-            }
-            
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        if (!rs.next()) {
+            String msj = "ID no existe: " + idCliente;
+            JOptionPane.showMessageDialog(null, msj);
             IDcliente.setText("");
+        } else {
+            String NombreC = rs.getString("NombreCliente");
+            String IDC = rs.getString("IDcliente");
+            String ProductoC = rs.getString("Producto");
+            String FechaC = rs.getString("Fecha");
+
+            MostrarNombre.setText(NombreC);
+            MostrarID.setText(IDC);
+            MostrarProducto.setText(ProductoC);
+            MostrarFecha.setText(FechaC);
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        IDcliente.setText("");
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
