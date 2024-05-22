@@ -13,5 +13,6 @@ public class Clientes {
     public static String NombreCliente;
     public static String Producto;
     public static String Fecha;
+    public static String costo;
     
 }

@@ -177,12 +177,14 @@ String nombreCliente = NombreCliente.getText();
     String producto = Producto.getText();
     LocalDateTime fechaActual = LocalDateTime.now();
     String fecha = fechaActual.toString();
+    String costoC = Costo.getText();
 
     Clientes cliente = new Clientes();
     Clientes.NombreCliente = nombreCliente;
     Clientes.IDcliente = idCliente;
     Clientes.Producto = producto;
-    cliente.Fecha = fecha;
+    Clientes.Fecha = fecha;
+    Clientes.costo = costoC;
 
     if (nombreCliente.trim().isEmpty() || idCliente.trim().isEmpty() || producto.trim().isEmpty()) {
         JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
@@ -207,13 +209,14 @@ String nombreCliente = NombreCliente.getText();
         conn = DriverManager.getConnection(url, user, password);
 
         // Consulta de inserción
-        String sql = "INSERT INTO clientes (IDcliente, NombreCliente, Producto, Fecha) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO clientes (IDcliente, NombreCliente, Producto, Fecha, Costo) VALUES (?, ?, ?, ?, ?)";
 
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, idCliente);
         pstmt.setString(2, nombreCliente);
         pstmt.setString(3, producto);
         pstmt.setString(4, fecha);
+        pstmt.setString(5, costoC);
 
         int rowsInserted = pstmt.executeUpdate();
         if (rowsInserted > 0) {
