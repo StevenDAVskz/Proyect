@@ -203,12 +203,14 @@
                           <Component id="jLabel10" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" max="-2" attributes="0">
-                          <Component id="MostrarNombre" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="MostrarID" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="MostrarFecha" alignment="0" min="-2" pref="29" max="-2" attributes="0"/>
-                          <Component id="MostrarProducto" alignment="3" pref="33" max="32767" attributes="0"/>
-                          <Component id="CostoCampo" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="MostrarNombre" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="MostrarID" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="MostrarProducto" alignment="3" pref="33" max="32767" attributes="0"/>
+                              <Component id="CostoCampo" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace pref="260" max="32767" attributes="0"/>
                   </Group>

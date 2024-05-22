@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package guiA;
+import static guiA.VentanaCrear.ValidarNumeros;
+import guiA.datos.Clientes;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.DriverManager;
+import javax.swing.JTextField;
 
 /**
  *
@@ -16,6 +25,7 @@ public class Factura_modificar extends javax.swing.JFrame {
     public Factura_modificar() {
         initComponents();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,18 +38,18 @@ public class Factura_modificar extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        IDcliente = new javax.swing.JTextField();
+        CampoID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        CampoNombreC = new javax.swing.JTextField();
+        CampoIDc = new javax.swing.JTextField();
+        CampoFechaC = new javax.swing.JTextField();
+        CampoProductoC = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        CampoCostoC = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -63,14 +73,27 @@ public class Factura_modificar extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 24)); // NOI18N
         jLabel1.setText("Modificar");
 
+        CampoID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CampoIDActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel3.setText("Ingrese el ID del cliente");
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        CampoNombreC.setEnabled(false);
+
+        CampoIDc.setEnabled(false);
+
+        CampoFechaC.setEnabled(false);
+
+        CampoProductoC.setEnabled(false);
+        CampoProductoC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                CampoProductoCActionPerformed(evt);
             }
         });
 
@@ -82,6 +105,8 @@ public class Factura_modificar extends javax.swing.JFrame {
 
         jLabel12.setText("Producto");
 
+        CampoCostoC.setEnabled(false);
+
         jLabel13.setText("costo");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -91,11 +116,11 @@ public class Factura_modificar extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(CampoCostoC, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                    .addComponent(CampoNombreC, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CampoIDc, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CampoFechaC, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CampoProductoC, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -111,23 +136,23 @@ public class Factura_modificar extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoNombreC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoIDc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoFechaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoProductoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoCostoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -159,6 +184,11 @@ public class Factura_modificar extends javax.swing.JFrame {
         jLabel9.setText("Producto");
 
         jButton3.setText("Modificar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Shaded Larch PERSONAL USE ONLY", 0, 15)); // NOI18N
         jLabel10.setText("Nombre");
@@ -194,25 +224,24 @@ public class Factura_modificar extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(CampoID, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(IDcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(MostrarID, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(MostrarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addContainerGap(468, Short.MAX_VALUE))))
+                                            .addComponent(MostrarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap(537, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +252,7 @@ public class Factura_modificar extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(IDcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -272,7 +301,68 @@ public class Factura_modificar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
+ String idCliente = CampoID.getText().trim();
+    
+    if (idCliente.isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+        return;
+    }
+    
+    if (!ValidarNumeros(idCliente)) {
+        JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
+        return;
+    }
+    
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        // Configuración de conexión a la base de datos
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
+        
+        // Verificar si el ID existe en la base de datos
+        String query = "SELECT NombreCliente, IDcliente, Producto, Fecha FROM clientes WHERE IDcliente = ?";
+        pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, idCliente);
+        rs = pstmt.executeQuery();
+
+        if (!rs.next()) {
+            String msj = "ID no existe: " + idCliente;
+            JOptionPane.showMessageDialog(null, msj);
+            CampoID.setText("");
+        } else {
+            String NombreC = rs.getString("NombreCliente");
+            String IDC = rs.getString("IDcliente");
+            String ProductoC = rs.getString("Producto");
+            String FechaC = rs.getString("Fecha");
+            String CostoC = rs.getString("Costo");
+
+            MostrarNombre.setText(NombreC);
+            MostrarID.setText(IDC);
+            MostrarProducto.setText(ProductoC);
+            MostrarFecha.setText(FechaC);
+            costo.setText(CostoC);
+            
+            CampoNombreC.setEditable(true);
+            CampoCostoC.setEditable(true);
+            CampoID.setEditable(true);
+            CampoProductoC.setEditable(true);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        CampoID.setText("");
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }      
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -282,16 +372,93 @@ public class Factura_modificar extends javax.swing.JFrame {
         factura.setLocationRelativeTo(this);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void CampoProductoCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoProductoCActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_CampoProductoCActionPerformed
+
+    private void CampoIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CampoIDActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        String idCliente = CampoID.getText().trim();
+        
+       
+    
+    if (idCliente.isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+        return;
+    }
+    
+    if (!ValidarNumeros(idCliente)) {
+        JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
+        return;
+    }
+    
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        
+        
+        // Configuración de conexión a la base de datos
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
+        
+        // Verificar si el ID existe en la base de datos
+        String query = "SELECT NombreCliente, IDcliente, Producto, Fecha FROM clientes WHERE IDcliente = ?";
+        pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, idCliente);
+        rs = pstmt.executeQuery();
+
+        if (!rs.next()) {
+            String msj = "ID no existe: " + idCliente;
+            JOptionPane.showMessageDialog(null, msj);
+            CampoID.setText("");
+        } else {
+          
+        
+        pstmt = conn.prepareStatement(query);
+        pstmt.setString(1, CampoNombreC.getText());
+        pstmt.setString(2, CampoProductoC.getText());
+        pstmt.setString(3, CampoCostoC.getText());
+        pstmt.setString(4, CampoIDc.getText());
+        int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+        JOptionPane.showMessageDialog(null, "Cliente actualizado exitosamente.");
+    } else {
+        JOptionPane.showMessageDialog(null, "No se pudo encontrar el cliente con ID: " + idCliente);
+    }
+
+            
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        CampoID.setText("");
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField IDcliente;
+    private javax.swing.JTextField CampoCostoC;
+    private javax.swing.JTextField CampoFechaC;
+    private javax.swing.JTextField CampoID;
+    private javax.swing.JTextField CampoIDc;
+    private javax.swing.JTextField CampoNombreC;
+    private javax.swing.JTextField CampoProductoC;
     private javax.swing.JLabel MostrarFecha;
     private javax.swing.JLabel MostrarID;
     private javax.swing.JLabel MostrarNombre;
@@ -315,10 +482,5 @@ public class Factura_modificar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }
