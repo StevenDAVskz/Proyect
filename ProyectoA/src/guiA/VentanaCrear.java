@@ -236,7 +236,7 @@ public class VentanaCrear extends javax.swing.JFrame {
 
             int rowsAffected = insertStmt.executeUpdate();
             if (rowsAffected > 0) {
-                String mensaje = "Usuario creado con éxito! Número actuales de usuarios: " + rowsAffected;
+                String mensaje = "Usuario creado con éxito!";
                 JOptionPane.showMessageDialog(null, mensaje);
                 limpiar();
                 setVisible(false);

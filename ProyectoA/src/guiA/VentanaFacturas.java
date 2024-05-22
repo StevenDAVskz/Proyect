@@ -75,6 +75,11 @@ public class VentanaFacturas extends javax.swing.JFrame {
 
         jButton6.setBackground(new java.awt.Color(204, 204, 255));
         jButton6.setText("Eliminar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 2, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -197,6 +202,13 @@ public class VentanaFacturas extends javax.swing.JFrame {
         buscar.setLocationRelativeTo(this);
         setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        EliminarFacturas eliminar = new EliminarFacturas();
+        eliminar.setVisible(true);
+        eliminar.setLocationRelativeTo(this);
+        setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

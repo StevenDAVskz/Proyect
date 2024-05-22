@@ -234,7 +234,7 @@ public class EliminarFacturas extends javax.swing.JFrame {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
 
             // Verificar si el ID existe en la base de datos
-            String query = "SELECT NombreCliente, IDcliente, Producto, Fecha FROM clientes WHERE IDcliente = ?";
+            String query = "SELECT NombreCliente, IDcliente, Producto, Fecha, Costo FROM clientes WHERE IDcliente = ?";
             pstmt = conn.prepareStatement(query);
             pstmt.setString(1, idCliente);
             rs = pstmt.executeQuery();
