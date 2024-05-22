@@ -64,7 +64,7 @@ public class Factura_modificar extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        costo = new javax.swing.JLabel();
+        MostrarCosto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -210,7 +210,7 @@ public class Factura_modificar extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(MostrarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(costo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(MostrarCosto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addComponent(jButton3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -268,7 +268,7 @@ public class Factura_modificar extends javax.swing.JFrame {
                             .addComponent(MostrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(costo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MostrarCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3)
@@ -293,62 +293,83 @@ public class Factura_modificar extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
  String idCliente = CampoID.getText().trim();
-    
-    if (idCliente.isEmpty()) {
-        JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
-        return;
-    }
-    
-    if (!ValidarNumeros(idCliente)) {
-        JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
-        return;
-    }
-    
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
 
-    try {
-        // Configuración de conexión a la base de datos
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
-        
-        // Verificar si el ID existe en la base de datos
-        String query = "SELECT NombreCliente, IDcliente, Producto, Fecha FROM clientes WHERE IDcliente = ?";
-        pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, idCliente);
-        rs = pstmt.executeQuery();
+if (idCliente.isEmpty()) {
+    JOptionPane.showMessageDialog(rootPane, "Debes llenar todos los campos, son obligatorios.");
+    return;
+}
 
-        if (!rs.next()) {
-            String msj = "ID no existe: " + idCliente;
-            JOptionPane.showMessageDialog(null, msj);
-            CampoID.setText("");
-        } else {
-            String NombreC = rs.getString("NombreCliente");
-            String IDC = rs.getString("IDcliente");
-            String ProductoC = rs.getString("Producto");
-            String FechaC = rs.getString("Fecha");
-            String CostoC = rs.getString("Costo");
+if (!ValidarNumeros(idCliente)) {
+    JOptionPane.showMessageDialog(rootPane, "Solo se deben ingresar números en el ID, máximo 10 números.");
+    return;
+}
 
-            MostrarNombre.setText(NombreC);
-            MostrarID.setText(IDC);
-            MostrarProducto.setText(ProductoC);
-            MostrarFecha.setText(FechaC);
-            costo.setText(CostoC);
-            
-            
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+Connection conn = null;
+PreparedStatement pstmt = null;
+ResultSet rs = null;
+
+try {
+    // Configuración de conexión a la base de datos
+    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/resgistro", "root", "");
+    
+    // Verificar si el ID existe en la base de datos
+    String query = "SELECT NombreCliente, Producto, Fecha, Costo FROM clientes WHERE IDcliente = ?";
+    pstmt = conn.prepareStatement(query);
+    pstmt.setString(1, idCliente);
+    rs = pstmt.executeQuery();
+
+    if (!rs.next()) {
+        String msj = "ID no existe: " + idCliente;
+        JOptionPane.showMessageDialog(null, msj);
         CampoID.setText("");
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    } else {
+        // Recuperar la información del cliente
+        String nombreCliente = rs.getString("NombreCliente");
+        String producto = rs.getString("Producto");
+        String fecha = rs.getString("Fecha");
+        String costo = rs.getString("Costo");
+        
+        // Mostrar la información en los campos de texto correspondientes
+        MostrarNombre.setText(nombreCliente);
+        MostrarProducto.setText(producto);
+        MostrarFecha.setText(fecha);
+        MostrarCosto.setText(costo);
+        
+        // Permitir al usuario modificar la información del cliente
+        String nuevoNombre = JOptionPane.showInputDialog(null, "Nuevo nombre del cliente:", nombreCliente);
+        String nuevoProducto = JOptionPane.showInputDialog(null, "Nuevo producto:", producto);
+        String nuevaFecha = JOptionPane.showInputDialog(null, "Nueva fecha:", fecha);
+        String nuevoCosto = JOptionPane.showInputDialog(null, "Nuevo costo:", costo);
+        
+        // Actualizar la información del cliente en la base de datos
+        String updateQuery = "UPDATE clientes SET NombreCliente=?, Producto=?, Fecha=?, Costo=? WHERE IDcliente=?";
+        pstmt = conn.prepareStatement(updateQuery);
+        pstmt.setString(1, nuevoNombre);
+        pstmt.setString(2, nuevoProducto);
+        pstmt.setString(3, nuevaFecha);
+        pstmt.setString(4, nuevoCosto);
+        pstmt.setString(5, idCliente);
+        int rowsAffected = pstmt.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Cliente actualizado exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo actualizar el cliente con ID: " + idCliente);
         }
-    }      
+    }
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    CampoID.setText("");
+} finally {
+    try {
+        if (rs != null) rs.close();
+        if (pstmt != null) pstmt.close();
+        if (conn != null) conn.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+      
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -447,11 +468,11 @@ public class Factura_modificar extends javax.swing.JFrame {
     private javax.swing.JTextField CampoIDc;
     private javax.swing.JTextField CampoNombreC;
     private javax.swing.JTextField CampoProductoC;
+    private javax.swing.JLabel MostrarCosto;
     private javax.swing.JLabel MostrarFecha;
     private javax.swing.JLabel MostrarID;
     private javax.swing.JLabel MostrarNombre;
     private javax.swing.JLabel MostrarProducto;
-    private javax.swing.JLabel costo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
