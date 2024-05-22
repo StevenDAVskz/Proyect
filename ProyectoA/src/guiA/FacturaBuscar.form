@@ -167,19 +167,28 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel7" pref="114" max="32767" attributes="0"/>
                           <Component id="MostrarID" max="32767" attributes="0"/>
+                          <Component id="jLabel7" pref="80" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="MostrarFecha" max="32767" attributes="0"/>
-                          <Component id="jLabel8" pref="87" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel8" min="-2" pref="87" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel9" min="-2" pref="74" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="MostrarFecha" min="-2" pref="87" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="MostrarProducto" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel9" pref="121" max="32767" attributes="0"/>
-                          <Component id="MostrarProducto" max="32767" attributes="0"/>
+                          <Component id="jLabel10" pref="69" max="32767" attributes="0"/>
+                          <Component id="CostoCampo" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -191,15 +200,17 @@
                           <Component id="jLabel9" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                           <Component id="jLabel8" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                           <Component id="jLabel7" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                          <Component id="jLabel10" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" max="-2" attributes="0">
                           <Component id="MostrarNombre" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                           <Component id="MostrarID" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="MostrarFecha" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
-                          <Component id="MostrarProducto" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                          <Component id="MostrarFecha" alignment="0" min="-2" pref="29" max="-2" attributes="0"/>
+                          <Component id="MostrarProducto" alignment="3" pref="33" max="32767" attributes="0"/>
+                          <Component id="CostoCampo" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="259" max="32767" attributes="0"/>
+                      <EmptySpace pref="260" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -244,6 +255,16 @@
             <Component class="javax.swing.JLabel" name="MostrarFecha">
             </Component>
             <Component class="javax.swing.JLabel" name="MostrarProducto">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel10">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Shaded Larch PERSONAL USE ONLY" size="15" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Costo"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="CostoCampo">
             </Component>
           </SubComponents>
         </Container>
